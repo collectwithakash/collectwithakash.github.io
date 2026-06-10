@@ -1,0 +1,18 @@
+.hero {
+  position: relative;
+  text-align: center;
+}
+
+.hero-img {
+  width: 100%;
+  height: auto;
+  opacity: 0.85;
+}
+
+.hero-text {
+  position: absolute;
+  top: 40%;
+  left: 10%;
+  text-align: left;
+  color: #fff;
+}
