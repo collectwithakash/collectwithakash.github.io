@@ -9,6 +9,51 @@
 
 <style>
 
+html {
+  scroll-behavior: smooth;
+}
+
+
+.categories {
+  scrollbar-width: none;
+}
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+
+.card{
+  box-shadow: 0 10px 25px rgba(255,0,0,0.05);
+}
+
+.card:hover{
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(255,0,0,0.2);
+}
+
+
+@media (max-width:768px){
+  .hero{
+    height:auto;
+    min-height:100vh;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 *{
 margin:0;
 padding:0;
