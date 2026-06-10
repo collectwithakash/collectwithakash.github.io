@@ -26,3 +26,27 @@
   font-size: 1.2em;
   color: #ccc;
 }
+
+.brands {
+  background-color: #111;
+  padding: 20px 0;
+}
+
+.brands ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.brands li {
+  margin: 0 15px;
+  font-weight: 600;
+  color: #b3b3b3;
+  transition: color 0.3s ease;
+}
+
+.brands li:hover {
+  color: #6c3bff; /* Highlight on hover */
+}
