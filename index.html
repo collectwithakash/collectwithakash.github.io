@@ -130,9 +130,22 @@ margin-bottom:40px;
 }
 
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+display:flex;
 gap:25px;
+overflow-x:auto;
+overflow-y:hidden;
+padding-bottom:15px;
+scroll-behavior:smooth;
+scrollbar-width:none;
+}
+
+.grid::-webkit-scrollbar{
+display:none;
+}
+
+.card{
+min-width:350px;
+flex:0 0 auto;
 }
 
 .card{
