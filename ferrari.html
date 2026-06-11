@@ -48,20 +48,31 @@ border-radius:5px;
 
 <div class="gallery">
 
-<img src="Ferrari/IMG_8627 (1).JPG">
-<img src="Ferrari/IMG_8624 (2).JPG">
-<img src="Ferrari/IMG_8625 (3).JPG">
-<img src="Ferrari/IMG_8630 (4).JPG">
-<img src="Ferrari/IMG_8628 (5).JPG">
-<img src="Ferrari/IMG_8633 (6).JPG">
-<img src="Ferrari/IMG_8629 (7).JPG">
-<img src="Ferrari/IMG_8631 (8).JPG">
-<img src="Ferrari/IMG_8634 (9).JPG">
-<img src="Ferrari/IMG_8635 (10).JPG">
-<img src="Ferrari/IMG_8632 (11).JPG">
-<img src="Ferrari/IMG_8626 (12).JPG">
+<img src="Ferrari/IMG_8627 (1).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8624 (2).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8625 (3).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8630 (4).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8628 (5).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8633 (6).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8629 (7).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8631 (8).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8634 (9).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8635 (10).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8632 (11).JPG" onclick="openImage(this.src)">
+<img src="Ferrari/IMG_8626 (12).JPG" onclick="openImage(this.src)">
  
 </div>
+
+<div id="lightbox" class="lightbox">
+  <span class="close" onclick="closeImage()">&times;</span>
+
+  <span class="prev" onclick="changeImage(-1)">&#10094;</span>
+
+  <img id="lightbox-img">
+
+  <span class="next" onclick="changeImage(1)">&#10095;</span>
+</div>
+
 
 </body>
 </html>
