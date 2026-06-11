@@ -96,13 +96,6 @@ right:20px;
 
 
 
-#counter{
-position:absolute;
-bottom:30px;
-color:white;
-font-size:18px;
-} 
-
 @media(max-width:768px){
 
 body{
@@ -157,7 +150,6 @@ right:20px;
   <span class="prev" onclick="changeImage(-1)">&#10094;</span>
 
   <img id="lightbox-img">
-  <div id="counter"></div>
  
   <span class="next" onclick="changeImage(1)">&#10095;</span>
 </div>
@@ -167,10 +159,7 @@ right:20px;
 
 const images = Array.from(document.querySelectorAll('.gallery img'));
 let currentIndex = 0;
-function updateCounter(){
-document.getElementById('counter').innerHTML =
-(currentIndex + 1) + " / " + images.length;
-}
+
 
 function openImage(src){
 
@@ -178,7 +167,7 @@ function openImage(src){
 
   document.getElementById('lightbox').style.display = 'flex';
   document.getElementById('lightbox-img').src = src;
- updateCounter();
+
 }
 
 function closeImage(){
@@ -199,7 +188,7 @@ function changeImage(direction){
 
   document.getElementById('lightbox-img').src =
   images[currentIndex].src;
- updateCounter();
+ 
 }
 
 document.addEventListener('keydown', function(e){
