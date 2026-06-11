@@ -50,7 +50,14 @@ margin-bottom:30px;
 display:flex;
 gap:20px;
 overflow-x:auto;
+overflow-y:hidden;
 padding-bottom:10px;
+scroll-behavior:smooth;
+scrollbar-width:none;
+}
+
+.gallery::-webkit-scrollbar{
+display:none;
 }
 
 .gallery img{
@@ -68,6 +75,8 @@ cursor:pointer;
 
 
 <img src="Hotwheels/IMG_6741.JPG" onclick="openImage(this.src)">
+<img src="Hotwheels/IMG_8699.JPG" onclick="openImage(this.src)">
+<img src="Hotwheels/IMG_8700.JPG" onclick="openImage(this.src)">
 
 </div>
 
