@@ -76,6 +76,27 @@ text-decoration:none;
 border-radius:8px;
 font-weight:700;
 }  
+
+.prev,
+.next{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+font-size:60px;
+color:white;
+cursor:pointer;
+padding:20px;
+z-index:10000;
+user-select:none;
+}
+
+.prev{
+left:20px;
+}
+
+.next{
+right:20px;
+}
   
 </style>
 </head>
@@ -95,18 +116,47 @@ font-weight:700;
 
 <div id="viewer" class="viewer">
   <span class="close" onclick="closeImage()">&times;</span>
+
+  <span class="prev" onclick="changeImage(-1)">❮</span>
+
   <img id="viewer-img">
+
+  <span class="next" onclick="changeImage(1)">❯</span>
 </div>
 
 <script>
+
+const images = Array.from(document.querySelectorAll('.gallery img'));
+let currentIndex = 0;
+
 function openImage(src){
+
+  currentIndex = images.findIndex(img => img.src === src);
+
   document.getElementById('viewer').style.display='flex';
-  document.getElementById('viewer-img').src=src;
+  document.getElementById('viewer-img').src = src;
 }
 
 function closeImage(){
   document.getElementById('viewer').style.display='none';
 }
+
+function changeImage(direction){
+
+  currentIndex += direction;
+
+  if(currentIndex < 0){
+    currentIndex = images.length - 1;
+  }
+
+  if(currentIndex >= images.length){
+    currentIndex = 0;
+  }
+
+  document.getElementById('viewer-img').src =
+  images[currentIndex].src;
+}
+
 </script>
 
 </body>
