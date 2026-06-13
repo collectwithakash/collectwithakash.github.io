@@ -19,6 +19,62 @@ text-align:center;
 margin-bottom:40px;
 }
 
+<style>
+
+body{
+background:#050505;
+color:white;
+font-family:Montserrat,sans-serif;
+padding:40px;
+}
+
+h1{
+text-align:center;
+margin-bottom:40px;
+}
+
+/* Add this below */
+
+.car-card{
+background:#111;
+padding:20px;
+border-radius:15px;
+max-width:350px;
+margin:auto;
+text-align:center;
+}
+
+.car-card img{
+width:100%;
+height:250px;
+object-fit:cover;
+border-radius:10px;
+margin-bottom:15px;
+}
+
+.buy-btn{
+display:inline-block;
+margin-top:15px;
+padding:12px 25px;
+background:#25D366;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:bold;
+}
+
+.cars-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:25px;
+margin-top:30px;
+}  
+
+</style>
+
+
+
+  
 </style>
 
 </head>
@@ -26,15 +82,21 @@ margin-bottom:40px;
 
 <h1>Available Cars</h1>
 
-<div>
+<div class="car-card">
 
-<h2>Hot Wheels Godzilla R35</h2>
+<img src="Sale/IMG_8329 (Sale).JPG" alt="Godzilla R35">
 
-<p>MRP: ₹179</p>
+<h2>Hot Wheels 1983 Porsche 928S, 68 Shelby GT500 & 1983 Porsche 928S </h2>
 
-<p>Stock: 1</p>
+<p><strong>MRP:</strong> ₹179</p>
 
-<p>Condition: Carded</p>
+<p><strong>Stock:</strong> 1</p>
+
+<p><strong>Condition:</strong> Carded</p>
+
+<a href="https://wa.me/91YOURNUMBER" class="buy-btn">
+Buy on WhatsApp
+</a>
 
 </div>
 
