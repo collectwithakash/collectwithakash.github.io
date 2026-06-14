@@ -42,14 +42,16 @@ margin-bottom:15px;
 }
 
 .buy-btn{
-display:inline-block;
-margin-top:15px;
-padding:12px 25px;
+display:block;
+width:100%;
+padding:12px;
+margin-top:10px;
 background:#25D366;
 color:white;
 text-decoration:none;
 border-radius:8px;
 font-weight:bold;
+text-align:center;
 }
 
 .cars-grid{
@@ -125,7 +127,33 @@ transition:.3s;
 .cart-btn:hover{
 opacity:0.9;
 }
-  
+
+
+.quantity-box{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:15px;
+width:100%;
+padding:12px;
+margin-top:15px;
+margin-bottom:10px;
+background:#007AFF;
+border-radius:8px;
+font-size:18px;
+font-weight:bold;
+}
+
+.qty-btn{
+width:35px;
+height:35px;
+border:none;
+border-radius:50%;
+cursor:pointer;
+font-size:20px;
+font-weight:bold;
+}
+
 </style>
 
 
@@ -167,9 +195,15 @@ opacity:0.9;
 
 <p><strong>Condition:</strong> Carded</p>
 
-<button class="cart-btn" onclick="addToCart()">
-Add to Cart
-</button>
+<div class="quantity-box">
+
+<button class="qty-btn" onclick="decreaseQty()">−</button>
+
+<span id="quantity">0</span>
+
+<button class="qty-btn" onclick="increaseQty()">+</button>
+
+</div>
 
 <a href="https://wa.me/919567384351?text=Hi%20Akash,%20I'm%20interested%20in%20your%20Hot%20Wheels%20Mainlines%20(₹179%20each)." class="buy-btn">
 Buy on WhatsApp
@@ -181,11 +215,28 @@ Buy on WhatsApp
 
 <script>
 
-let count = 0;
+let quantity = 0;
 
-function addToCart(){
-count++;
-document.getElementById("cartCount").innerText = count;
+function increaseQty(){
+
+quantity++;
+
+document.getElementById("quantity").innerText = quantity;
+document.getElementById("cartCount").innerText = quantity;
+
+}
+
+function decreaseQty(){
+
+if(quantity > 0){
+
+quantity--;
+
+document.getElementById("quantity").innerText = quantity;
+document.getElementById("cartCount").innerText = quantity;
+
+}
+
 }
 
 </script>
