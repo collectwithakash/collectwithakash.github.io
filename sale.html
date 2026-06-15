@@ -225,7 +225,7 @@ font-weight:bold;
 <span id="quantity1">0</span>
 <button class="qty-btn" onclick="increaseQty1()">+</button>
 </div>
-<a href="https://t.me/collectwithakash" class="buy-btn" target="_blank">
+<a href="#" class="buy-btn" onclick="openTelegram()">
 Message on Telegram
 </a>
 </div>
@@ -257,7 +257,7 @@ Message on Telegram
 <span id="quantity2">0</span>
 <button class="qty-btn" onclick="increaseQty2()">+</button>
 </div>
-<a href="https://t.me/collectwithakash" class="buy-btn" target="_blank">
+<a href="#" class="buy-btn" onclick="openTelegram()">
 Message on Telegram
 </a>
 </div>
@@ -321,6 +321,22 @@ function updateCart(){
     document.getElementById("cartCount").innerText = qty1 + qty2;
 }
 
+
+
+
+
+
+function openTelegram() {
+    window.location.href = "tg://resolve?domain=collectwithakash";
+
+    setTimeout(function() {
+        window.location.href = "https://t.me/collectwithakash";
+    }, 1000);
+}
+
+
+
+  
 </script>
 
 
