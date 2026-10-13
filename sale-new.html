@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Available Cars</title>
+<style>
+  :root { --bg:#14171b; --card:#1d2227; --line:#2d343b; --text:#eceff1; --muted:#9aa4ad; --yellow:#ffc400; --red:#d7263d; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--line); }
+  header a { color:var(--text); text-decoration:none; }
+  button { font:inherit; cursor:pointer; }
+  #cart { background:var(--yellow); color:#14171b; border:0; border-radius:20px; padding:8px 14px; font-weight:700; }
+  h1 { margin:24px 20px 8px; font-size:2rem; }
+  #note { margin:0 20px 16px; color:var(--muted); }
+  #cars { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; padding:0 20px 40px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+  .photo { position:relative; aspect-ratio:4/3; background:#0e1114; display:flex; align-items:center; justify-content:center; color:var(--muted); }
+  .photo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .badge { position:absolute; top:10px; left:10px; background:var(--yellow); color:#14171b; font-size:.8rem; font-weight:700; padding:3px 9px; border-radius:12px; }
+  .badge.low, .badge.out { background:var(--red); color:#fff; }
+  .body { padding:14px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .brand, .meta { color:var(--muted); font-size:.9rem; margin:0; }
+  .model { font-size:1.1rem; font-weight:700; margin:0; }
+  .price { font-size:1.2rem; font-weight:700; }
+  .qty { display:flex; align-items:center; gap:12px; margin-top:auto; padding-top:10px; }
+  .qty button { width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:transparent; color:var(--text); font-size:1.1rem; }
+  .qty button:disabled { opacity:.35; cursor:not-allowed; }
+  .msg { padding:12px 20px; margin:0 20px 12px; border-radius:8px; display:none; }
+  .msg.ok { display:block; background:#173b2a; } .msg.err { display:block; background:#4a1a22; }
+  dialog { background:var(--card); color:var(--text); border:1px solid var(--line); border-radius:12px; width:min(92vw,400px); }
+  dialog::backdrop { background:rgba(0,0,0,.6); }
+  label { display:block; margin:10px 0 4px; font-size:.9rem; color:var(--muted); }
+  input { width:100%; padding:10px; border-radius:6px; border:1px solid var(--line); background:#0e1114; color:var(--text); font:inherit; }
+  .hp { position:absolute; left:-9999px; }
+  .actions { display:flex; gap:10px; margin-top:16px; }
+  .actions button { flex:1; padding:10px; border-radius:6px; border:1px solid var(--line); background:transparent; color:var(--text); }
+  .actions .go { background:var(--yellow); color:#14171b; border:0; font-weight:700; }
+  .summary { color:var(--muted); font-size:.9rem; white-space:pre-line; }
+</style>
+</head>
+<body>
+<header>
+  <a href="index.html">← Back</a>
+  <button id="cart">🛒 Checkout (<span id="count">0</span>)</button>
+</header>
+<h1>Available Cars</h1>
+<p id="note">First come, first served. Choose your cars, then check out.</p>
+<div id="banner" class="msg"></div>
+<div id="cars"><p style="padding:0 20px;color:var(--muted)">Loading cars…</p></div>
+
+<dialog id="co">
+  <form id="form">
+    <h2 style="margin-top:0">Your details</h2>
+    <p class="summary" id="summary"></p>
+    <label for="n">Name</label><input id="n" required maxlength="80" autocomplete="name">
+    <label for="p">Phone (WhatsApp or Telegram number)</label><input id="p" required inputmode="tel" pattern="\+?[0-9 ]{7,15}" autocomplete="tel">
+    <label for="c">City</label><input id="c" maxlength="60" autocomplete="address-level2">
+    <input class="hp" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="actions"><button type="button" id="x">Cancel</button><button class="go" id="send">Place order</button></div>
+  </form>
+</dialog>
+
+<script>
+  // Public address of your storefront API (no secrets here).
+  const API = "https://effects-resist-transcript-fleece.trycloudflare.com";
+  const TELEGRAM = "collectwithakash";
+
+  let cars = [], last = "";
+  const qty = {};
+  const $ = id => document.getElementById(id);
+  const fmt = n => "₹" + Number(n).toLocaleString("en-IN", { maximumFractionDigits: 2 });
+  const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; };
+  const picked = () => cars.filter(c => qty[c.id] > 0);
+  const banner = (t, ok) => { const b = $("banner"); b.textContent = t; b.className = "msg " + (ok ? "ok" : "err"); };
+
+  function refreshCart() {
+    $("count").textContent = picked().reduce((s, c) => s + qty[c.id], 0);
+    cars.forEach(c => {
+      const n = $("q" + c.id); if (n) n.textContent = qty[c.id];
+      const m = $("m" + c.id), p = $("p" + c.id);
+      if (m) m.disabled = qty[c.id] <= 0;
+      if (p) p.disabled = qty[c.id] >= c.available;
+    });
+  }
+
+  function card(c) {
+    const d = el("div", "card"), ph = el("div", "photo");
+    if (c.image) { const i = new Image(); i.src = API + c.image; i.alt = c.brand + " " + c.model; i.onerror = () => { i.remove(); ph.append("Photo coming soon"); }; ph.append(i); }
+    else ph.append("Photo coming soon");
+    const cls = c.available === 0 ? "out" : c.available <= 2 ? "low" : "";
+    ph.append(el("span", "badge " + cls, c.available === 0 ? "Sold out" : c.available + " Left"));
+    const b = el("div", "body");
+    b.append(el("p", "brand", c.brand), el("p", "model", c.model), el("div", "price", fmt(c.price) + " each"),
+      el("p", "meta", `Scale: ${c.scale} · Condition: ${c.condition}`),
+      el("p", "meta", `Availability: ${c.status} · ${c.available} available`));
+    const q = el("div", "qty"), m = el("button", "", "−"), p = el("button", "", "+"), n = el("span", "", "0");
+    m.id = "m" + c.id; p.id = "p" + c.id; n.id = "q" + c.id;
+    m.onclick = () => { qty[c.id] = Math.max(0, qty[c.id] - 1); refreshCart(); };
+    p.onclick = () => { qty[c.id] = Math.min(c.available, qty[c.id] + 1); refreshCart(); };
+    q.append(m, n, p); b.append(q); d.append(ph, b);
+    return d;
+  }
+
+  async function load() {
+    try {
+      const r = await fetch(API + "/api/cars", { cache: "no-store" });
+      const text = await r.text();
+      if (text === last) return;
+      last = text; cars = JSON.parse(text);
+      const box = $("cars"); box.replaceChildren();
+      if (!cars.length) { box.append(el("p", "", "Nothing listed right now. Follow on Instagram for the next drop.")); return; }
+      cars.forEach(c => { qty[c.id] = Math.min(qty[c.id] || 0, c.available); box.append(card(c)); });
+      refreshCart();
+    } catch (e) { if (!last) $("cars").replaceChildren(el("p", "", "Could not load cars. Please try again soon.")); }
+  }
+
+  $("cart").onclick = () => {
+    const sel = picked();
+    if (!sel.length) return banner("Choose a quantity on at least one car first.", false);
+    $("summary").textContent = sel.map(c => `${qty[c.id]} × ${c.brand} ${c.model}`).join("\n") +
+      "\nTotal " + fmt(sel.reduce((s, c) => s + qty[c.id] * c.price, 0));
+    $("co").showModal();
+  };
+  $("x").onclick = () => $("co").close();
+
+  $("form").onsubmit = async e => {
+    e.preventDefault(); $("send").disabled = true;
+    try {
+      const r = await fetch(API + "/api/orders", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: $("n").value, phone: $("p").value, city: $("c").value, website: $("hp").value,
+          items: picked().map(c => ({ car_id: c.id, qty: qty[c.id] })) })
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Please check your details and try again.");
+      $("co").close(); Object.keys(qty).forEach(k => qty[k] = 0); last = "";
+      banner(`Order #${data.order_id} placed (${fmt(data.total)}). Akash will contact you to arrange payment and delivery. You can also message @${TELEGRAM} on Telegram.`, true);
+      await load(); window.scrollTo(0, 0);
+    } catch (err) { $("co").close(); banner(err.message, false); last = ""; load(); }
+    $("send").disabled = false;
+  };
+
+  load(); setInterval(load, 30000);
+</script>
+</body>
+</html>
